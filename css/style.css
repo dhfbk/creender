@@ -1,0 +1,29 @@
+* {
+	font-family: "Montserrat", sans-serif;
+}
+
+#login-header img {
+	width: 80%;
+}
+
+#btn-si {
+	margin-right: 20px;
+}
+
+#btn-si, #btn-no {
+	font-size: 3em;
+}
+
+.btn-disabled, .btn-disabled:hover {
+	background-color: #ddd;
+}
+
+#photo-form {
+	margin-top: 20px;
+}
+
+@media print {
+    html, body {
+       display: none;  /* hide whole page */
+    }
+}
