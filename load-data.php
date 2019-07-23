@@ -1,14 +1,21 @@
 <?php
 
-// Remove this to activate the tool
-exit();
+$UsersPerPhoto = 2;
+$Users = 25;
+$ResetUsers = true;
+$DebugUser = 2;
+$PhotosToDebugUsers = 50;
+$DefaultLang = "fr";
 
+// Just to be sure
 if (!isset($argv[1]) || $argv[1] != "pippo") {
 	exit();
 }
 
+$BaseForId = pow(10, strlen($Users));
+
+require_once("config.php");
 require_once("include.php");
-require_once("config.php") or die("Config file does not exist");
 
 function generaPassword() {
 	$parole = array(
@@ -31,40 +38,64 @@ function generaPassword() {
 		"paperina",
 		"battista"
 		);
+	if (file_exists("random_words.txt")) {
+		$fn = fopen("random_words.txt", "r");
+		$parole = array();
+
+		while(!feof($fn))  {
+			$result = fgets($fn);
+			$result = trim($result);
+			if (strlen($result) > 0) {
+				$parole[] = $result;
+			}
+		}
+
+		fclose($fn);
+	}
 	$n = $parole[rand(0, count($parole) - 1)];
 	$n .= str_pad(rand(1, 999), 3, "0", STR_PAD_LEFT);
+	$n .= randomPassword();
 	return $n;
 }
 
-function randomPassword() {
-	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+function randomPassword($len = 1) {
+	$alphabet = '!@#?%$';
 	$pass = array(); //remember to declare $pass as an array
 	$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-	for ($i = 0; $i < 8; $i++) {
+	for ($i = 0; $i < $len; $i++) {
 		$n = rand(0, $alphaLength);
 		$pass[] = $alphabet[$n];
 	}
 	return implode($pass); //turn the array into a string
 }
 
+function generateUserId($institution, $idui) {
+	global $BaseForId;
+	if ($idui > $BaseForId) {
+		die("User id is not valid");
+	}
+	return $institution * $BaseForId + $idui;
+}
 
 $scanned_directory = array_diff(scandir($directory), array('..', '.'));
 
-// $mysqli->query("DELETE FROM users WHERE id != 2");
-// for ($i=0; $i < 15; $i++) { 
-// 	for ($j=0; $j < 2; $j++) { 
-// 		$institution = $j + 1;
-// 		$idui = $i + 1;
-// 		$user_id = $institution * 100 + $idui;
-// 		$user = "c{$institution}u{$idui}";
-// 		$password = generaPassword();
-// 		$query = "INSERT INTO users VALUES (?, ?, ?, ?, ?)";
-// 		$stmt = $mysqli->prepare($query);
-// 		$stmt->bind_param("isssi", $user_id, $user, $user, $password, $institution);
-// 		$stmt->execute();
-// 	}
-// }
-// exit();
+if ($ResetUsers) {
+	$mysqli->query("DELETE FROM users WHERE id != 2");
+	for ($i = 0; $i < $Users; $i++) { 
+		for ($j = 0; $j < $UsersPerPhoto; $j++) { 
+			$institution = $j + 1;
+			$idui = $i + 1;
+			$user_id = generateUserId($institution, $idui);
+			$user = "c{$institution}u{$idui}";
+			$password = generaPassword();
+			print("Creating user {$user}\n");
+			$query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)";
+			$stmt = $mysqli->prepare($query);
+			$stmt->bind_param("isssis", $user_id, $user, $user, $password, $institution, $DefaultLang);
+			$stmt->execute();
+		}
+	}
+}
 
 $mysqli->query("DELETE FROM clusters");
 $mysqli->query("DELETE FROM photos");
@@ -84,34 +115,28 @@ $pClusters->bind_param("ii", $user_id, $i);
 
 foreach ($scanned_directory as $file) {
 	$i++;
-	// if ($i % 1000 > 10 || $i % 1000 == 0) {
-	// 	continue;
-	// }
 
 	if ($i % 25 == 0) {
-		echo "$i\n";
+		echo "$i photo inserted\n";
 	}
 
 	$pPhotos->execute();
-
-	// echo $mysqli->error."\n";
-
-	$u = intdiv($i - 1, 1000) + 1;
-	for ($j=1; $j <= 2; $j++) { 
-		$user_id = (100 * $j) + $u;
-
-		if ($u == 16) {
-			$user_id = 2;
-		}
-
+	
+	if ($i <= $PhotosToDebugUsers) {
+		$user_id = $DebugUser;
 		$pClusters->execute();
-		if ($user_id == 2) {
-			break;
-		}
-
-		// echo $mysqli->error."\n";
+		continue;
 	}
-	// echo "$file\n";
+
+	$idui = ($i - $PhotosToDebugUsers) % $Users;
+	if ($idui == 0) {
+		$idui = $Users;
+	}
+
+	for ($j = 1; $j <= $UsersPerPhoto; $j++) {
+		$user_id = generateUserId($j, $idui);
+		$pClusters->execute();
+	}
 }
 
 $pPhotos->close();

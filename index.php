@@ -1,10 +1,10 @@
 <?php
 
 // Remove this to activate the website
-exit();
+// exit();
 
+require_once("config.php");
 require_once("include.php");
-require_once("config.php") or die("Config file does not exist");
 
 if ($Action == "login") {
 	$username = $_REQUEST['uname1'];
@@ -18,12 +18,26 @@ if ($Action == "login") {
 		// Login ok
 		if ($data = $r->fetch_assoc()) {
 			$_SESSION['Login'] = $data;
+			$_SESSION['Lang'] = array();
+
+			$LangFile = "lang/" . $data['language'] . ".txt";
+			if (file_exists($LangFile)) {
+				if (($handle = fopen($LangFile, "r")) !== FALSE) {
+					while (($data = fgetcsv($handle, 1000, "\t")) !== FALSE) {
+						if (count($data) > 1) {
+							$_SESSION['Lang'][$data[0]] = $data[1];
+						}
+					}
+					fclose($handle);
+				}
+			}
+
 			back("/");
 		}
 		$stmt->close();
 	}
 
-	back("/", "Login errato", "danger");
+	back("/", "Login failed", "danger");
 }
 
 if (!$_SESSION['Login']) {
@@ -35,7 +49,7 @@ else {
 	switch ($Action) {
 		case 'logout':
 			unset($_SESSION['Login']);
-			back("/", "Logout eseguito correttamente");
+			back("/", "Logout ok");
 			break;
 		
 		case "statistics":
@@ -94,7 +108,7 @@ else {
 				back("/");
 			}
 			else {
-				back("/", "Errore nell'inserimento dei dati", "danger");
+				back("/", $_SESSION['Lang']['error'], "danger");
 			}
 			$stmt->close();
 			break;
@@ -118,7 +132,7 @@ else {
 				require_once("tpl/home.htm.php");
 			}
 			else {
-				echo "<p>Non ci sono fotografie da classificare</p>";
+				echo "<p>" . $_SESSION['Lang']['nophoto'] . "</p>";
 			}
 			$stmt->close();
 

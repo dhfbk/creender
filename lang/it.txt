@@ -1,0 +1,25 @@
+home	Home
+statistics	Statistiche
+logout	Logout
+user	Username
+password	Password
+why	Perché prenderesti in giro questo utente?
+select	Selezionare
+option1	Forma fisica
+option2	Abbigliamento
+option3	Posa
+option4	Espressione
+option5	Location
+option6	Attività
+option100	Altro
+what	Cosa scriveresti?
+if	Se vedessi questa immagine su Instagram, prenderesti in giro chi l'ha postata?
+yes	Sì
+no	No
+photos1	Fotografie classificate
+photos2	Fotografie da classificare
+error	Errore
+nophoto	Non ci sono fotografie da classificare
+insert	Inserisci testo
+confirm	Conferma
+cancel	Annulla

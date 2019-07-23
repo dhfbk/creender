@@ -1,0 +1,25 @@
+home	Page d'accueil
+statistics	Statistiques
+logout	Déconnexion
+user	Nom utilisateur
+password	Mot de passe
+why	Pourquoi voudriez-vous vous moquer de cet utilisateur?
+select	Sélectionner
+option1	Forme physique
+option2	Vêtements
+option3	Posture
+option4	Expression
+option5	Lieu
+option6	Activité
+option100	Autre
+what	Qu'écririez-vous dans le commentaire?
+if	Si tu voyais cette image sur Instagram, te moquerais-tu de ceux qui l'ont postée?
+yes	Oui
+no	Non
+photos1	Photographies classées
+photos2	Photographies à classer
+error	Erreur
+nophoto	Il n'y a pas de photographies à classer
+insert	Insérer du texte
+confirm	Confirmer
+cancel	Annuler

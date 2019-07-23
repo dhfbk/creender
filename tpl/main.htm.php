@@ -8,13 +8,13 @@
 	<div class="collapse navbar-collapse" id="navbarNav">
 		<ul class="navbar-nav">
 			<li class="nav-item active">
-				<a class="nav-link" href="?">Home</a>
+				<a class="nav-link" href="?"><?php echo $_SESSION['Lang']['home']; ?></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="?action=statistics">Statistiche</a>
+				<a class="nav-link" href="?action=statistics"><?php echo $_SESSION['Lang']['statistics']; ?></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="?action=logout">Logout</a>
+				<a class="nav-link" href="?action=logout"><?php echo $_SESSION['Lang']['logout']; ?></a>
 			</li>
 		</ul>
 	</div>
