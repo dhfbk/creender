@@ -1,11 +1,11 @@
 <?php
 
-$UsersPerPhoto = 2;
-$Users = 25;
+$UsersPerPhoto = 4;
+$Users = 1;
 $ResetUsers = true;
 $DebugUser = 2;
-$PhotosToDebugUsers = 50;
-$DefaultLang = "fr";
+$PhotosToDebugUsers = 100;
+$DefaultLang = "it";
 
 // Just to be sure
 if (!isset($argv[1]) || $argv[1] != "pippo") {

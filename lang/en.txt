@@ -1,0 +1,25 @@
+home	Home
+statistics	Statistics
+logout	Logout
+user	Username
+password	Password
+why	Why would you make fun of this user?
+select	Select
+option1	Body
+option2	Clothing
+option3	Pose
+option4	Facial expression
+option5	Location
+option6	Activity
+option100	Other
+what	What would you write?
+if	If you saw this picture on Instagram, would you make fun of the user who posted it?
+yes	Yes
+no	No
+photos1	Photos already classified
+photos2	Photos to be classified
+error	Error
+nophoto	There are no photos left
+insert	Insert text
+confirm	Confirm
+cancel	Cancel
